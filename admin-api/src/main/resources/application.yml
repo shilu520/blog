@@ -1,0 +1,26 @@
+#server
+server:
+  port: 8888
+spring:
+  application:
+    name: mszlu_blog
+
+  #datasource
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 520
+  redis:
+    host: 120.25.253.42
+    port: 6379
+
+#mybatis-plus
+mybatis-plus:
+  configuration:
+    #日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    #设置表名的前缀为ms_,之后只需要表名后面的名字匹配上就好了
+    db-config:
+      table-prefix: ms_
