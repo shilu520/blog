@@ -12,7 +12,7 @@
     </select>
 
     <!--List<Long> findHotsTagIds (int limit);-->
-    <select id="findHotsTagIds" resultType="java.lang.Long" parameterType="int">
+    <select id="findHotsTagIds" resultType="long" parameterType="int">
         select tag_id from ms_article_tag
         group by tag_id
         order by count(*) desc
@@ -21,7 +21,7 @@
 
     <!--List<Tag> findTagsByTagIds (List<Long> tagIds);-->
     <select id="findTagsByTagIds" resultType="com.million.blog.dao.pojo.Tag" parameterType="list">
-        select tag_name tagName from ms_tag
+        select id,tag_name tagName from ms_tag
         where id in
         <foreach collection="tagIds" item="tadId" separator="," open="(" close=")">
             #{tadId}

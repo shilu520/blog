@@ -1,7 +1,7 @@
 package com.million.blog.vo;
 
-import com.million.blog.dao.pojo.SysUser;
-import com.million.blog.dao.pojo.Tag;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.List;
@@ -10,17 +10,25 @@ import java.util.List;
 @Data
 public class ArticleVo {
 
-    private Long id;
+    /**
+     * 有些文章id是雪花算法生产的19位数字。初始查询返回的json数据
+     * 中id为19位，而jsNumber类型最多16位，超出的位数不保证精度，
+     * 导致前端再次查询文章时的请求参数id出错
+     * 可在对应的Vo类的id字段添加如下注解
+     * json序列化时转成字符串的形式
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private String id;
 
     private String title;
 
     private String summary;
 
-    private int commentCounts;
+    private Integer commentCounts;
 
-    private int viewCounts;
+    private Integer viewCounts;
 
-    private int weight;
+    private Integer weight;
     /**
      * 创建时间
      */
@@ -28,10 +36,12 @@ public class ArticleVo {
 
     private String author;
 
-//    private ArticleBodyVo body;
+    private ArticleBodyVo body;
 
     private List<TagVo> tags;
-
-//    private List<CategoryVo> categorys;
+    /**
+     *  文章分类 理应只能有一个分类 多个标签
+     */
+    private CategoryVo category;
 
 }

@@ -13,9 +13,9 @@ public class JWTUtils {
 
     private static final String jwtToken = "123456Mszlu!@#$$";
 
-    public static String createToken(Long userId){
-        Map<String,Object> claims = new HashMap<>();
-        claims.put("userId",userId);  //这里是B部分
+    public static String createToken (Long userId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);  //这里是B部分
         JwtBuilder jwtBuilder = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, jwtToken) // 签发算法，秘钥为jwtToken,设置A部分
                 .setClaims(claims) // body数据，要唯一，自行设置，将B部分放到这里
@@ -25,12 +25,12 @@ public class JWTUtils {
         return token;
     }
 
-    public static Map<String, Object> checkToken(String token){
+    public static Map<String, Object> checkToken (String token) {
         try {
             //解析B部分
             Jwt parse = Jwts.parser().setSigningKey(jwtToken).parse(token);
             return (Map<String, Object>) parse.getBody();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

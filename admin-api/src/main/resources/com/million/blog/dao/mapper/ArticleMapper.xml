@@ -6,10 +6,32 @@
 <mapper namespace="com.million.blog.dao.mapper.ArticleMapper">
     <!-- List<Articles> listArchives ();-->
     <select id="listArchives" resultType="com.million.blog.dao.dos.Articles">
-        select year(FROM_UNIXTIME(create_date/1000)) year,
-        month(FROM_UNIXTIME(create_date/1000)) month,
-        count(*)  count from ms_article
-        group by year,month
-        ORDER BY year DESC,month DESC
+        select year(FROM_UNIXTIME(create_date / 1000))  year,
+               month(FROM_UNIXTIME(create_date / 1000)) month,
+               count(*)                                 count
+        from ms_article
+        group by year, month
+        ORDER BY year DESC, month DESC
+    </select>
+    <!--  Long categoryId,
+                                Long tagId,
+                                String year,
+                                String month-->
+    <select id="listArticlesPage" resultType="com.million.blog.dao.pojo.Article">
+        select *from ms_article
+        <where>
+            1 = 1  <!--加上1=1 防止sql语句报错-->
+            <if test="categoryId !=null">
+                and category_id=#{categoryId}
+            </if>
+            <if test="tagId !=null">
+                and id in (select article_id from ms_article_tag where tag_id=#{tagId})
+            </if>
+            <if test="year !=null and year.length >0 and month !=null and month.length>0">
+                and (year(FROM_UNIXTIME(create_date / 1000)) =#{year} and
+                month(FROM_UNIXTIME(create_date / 1000))=#{month})
+            </if>
+        </where>
+        order by weight desc,create_date desc
     </select>
 </mapper>

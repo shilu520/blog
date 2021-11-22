@@ -2,6 +2,7 @@ package com.million.blog.service;
 
 import com.million.blog.dao.pojo.SysUser;
 import com.million.blog.vo.Result;
+import com.million.blog.vo.UserVo;
 
 /**
  * @Author: studyboy
@@ -43,4 +44,11 @@ public interface SysUserService {
      * @param sysUser
      */
     void save (SysUser sysUser);
+
+    /**
+     * 通过作者id  查询作者信息
+     * @param authorId
+     * @return
+     */
+    UserVo findUserVoByAuthorId (Long authorId);
 }

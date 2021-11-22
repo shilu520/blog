@@ -5,16 +5,13 @@ import com.million.blog.dao.mapper.SysUserMapper;
 import com.million.blog.dao.pojo.SysUser;
 import com.million.blog.service.LoginService;
 import com.million.blog.service.SysUserService;
-import com.million.blog.utils.JWTUtils;
 import com.million.blog.vo.ErrorCode;
 import com.million.blog.vo.LoginUserVo;
 import com.million.blog.vo.Result;
-import org.apache.commons.lang3.StringUtils;
+import com.million.blog.vo.UserVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 /**
  * @Author: studyboy
@@ -45,7 +42,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser findUser (String account, String password) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        //eq就是=，根据表中的数据和传入的数据进行比较
+        //eq就是=，根据表中的数据和传入的数据进行比较 查找
         queryWrapper.eq(SysUser::getAccount, account);
         queryWrapper.eq(SysUser::getPassword, password);
         queryWrapper.select(SysUser::getAccount, SysUser::getId, SysUser::getAvatar, SysUser::getNickname);
@@ -70,6 +67,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         LoginUserVo loginUserVo = new LoginUserVo();
         BeanUtils.copyProperties(sysUser, loginUserVo);
+        loginUserVo.setId(String.valueOf(sysUser.getId()));
         return Result.success(loginUserVo);
     }
 
@@ -86,5 +84,21 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public void save (SysUser sysUser) {
         sysUserMapper.insert(sysUser);
+    }
+
+    @Override
+    public UserVo findUserVoByAuthorId (Long authorId) {
+        SysUser sysUser = sysUserMapper.selectById(authorId);
+        //如果为空就设置一个默认的数值
+        if (sysUser == null) {
+            sysUser = new SysUser();
+            sysUser.setId(1L);
+            sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+            sysUser.setNickname("百万年薪");
+        }
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(sysUser, userVo);
+        userVo.setId(String.valueOf(sysUser.getId()));
+        return userVo;
     }
 }

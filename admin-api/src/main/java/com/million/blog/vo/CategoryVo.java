@@ -6,18 +6,18 @@ import lombok.Data;
 
 /**
  * @Author: studyboy
- * @Date: 2021/11/14  16:10
+ * @Date: 2021/11/17  21:41
  */
 
 @Data
-public class LoginUserVo {
+public class CategoryVo {
 
     @JsonSerialize(using = ToStringSerializer.class)
     private String id;
 
-    private String account;
-
-    private String nickName;
-
     private String avatar;
+
+    private String categoryName;
+
+    private String description;
 }
